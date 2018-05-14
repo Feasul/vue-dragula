@@ -137,6 +137,10 @@ class DragulaService {
   }
 
   domIndexOf (child, parent) {
+    if (!parent.children) {
+      // fix for svg elements in IE and Edge browsers that does not have children property
+      return 0;
+    }
     return Array.prototype.indexOf.call(
       parent.children,
       child
