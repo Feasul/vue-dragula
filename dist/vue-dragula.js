@@ -1,6 +1,6 @@
 /*!
  * vue-dragula v1.3.1
- * (c) 2018 Yichang Liu
+ * (c) 2019 Yichang Liu
  * Released under the MIT License.
  */
 (function (global, factory) {
@@ -460,6 +460,9 @@ var require$$0$3 = Object.freeze({
 	    if (o.mirrorContainer === void 0) {
 	      o.mirrorContainer = doc.body;
 	    }
+	    if (o.offset === void 0) {
+	      o.offset = thru;
+	    }
 
 	    var drake = emitter({
 	      containers: o.containers,
@@ -565,8 +568,13 @@ var require$$0$3 = Object.freeze({
 	      start(grabbed);
 
 	      var offset = getOffset(_item);
-	      _offsetX = getCoord('pageX', e) - offset.left;
-	      _offsetY = getCoord('pageY', e) - offset.top;
+	      var calculatedOffset = o.offset({
+	        x: getCoord('pageX', e) - offset.left,
+	        y: getCoord('pageY', e) - offset.top
+	      }, e, _item);
+
+	      _offsetX = calculatedOffset.x;
+	      _offsetY = calculatedOffset.y;
 
 	      classes.add(_copy || _item, 'gu-transit');
 	      renderMirrorImage();
@@ -1004,6 +1012,9 @@ var require$$0$3 = Object.freeze({
 	  }
 	  function always() {
 	    return true;
+	  }
+	  function thru(val) {
+	    return val;
 	  }
 	  function getRectWidth(rect) {
 	    return rect.width || rect.right - rect.left;
